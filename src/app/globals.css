@@ -2,20 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Removes previous CSS variables since they're not being used in the new design */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  /* Glass effect utilities */
+  .hero-glass {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
+  }
+
+  /* Modern gradient text */
+  .hero-gradient-text {
+    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
+  }
+
+  /* Card hover animations */
+  .hero-card {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .hero-card:hover {
+    @apply transform -translate-y-1 border-blue-500/30 bg-white/10;
+  }
+
+  /* Button styles */
+  .hero-button {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .hero-button:hover::before {
+    @apply opacity-100;
+  }
+
+  .hero-button::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Grain texture overlay */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3Cfeturbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* Gradient animation */
+.hero-bg-animate {
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Feature icon animation */
+.hero-feature-icon {
+  @apply transition-transform duration-300;
+}
+
+.hero-card:hover .hero-feature-icon {
+  @apply transform scale-110;
 }
