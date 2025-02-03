@@ -8,8 +8,10 @@ import WhyChoose from '@/components/layout/WhyChoose';
 import Streaming from '@/components/layout/Streaming';
 import Testimonials from '@/components/layout/Testimonials';
 import FAQ from '@/components/layout/FAQ';
+import KnowledgeBase from '@/components/layout/KnowledgeBase';
 import { Check } from '@/components/icons/Check';
 import Link from 'next/link';
+import Footer from '@/components/layout/Footer';
 
 export default function Home() {
   const plans = [
@@ -109,33 +111,11 @@ export default function Home() {
       {/* FAQ Section */}
       <FAQ />
 
-      {/* Welcome Section - Full width with centered content */}
-      <section className="w-full min-h-[calc(100vh-4rem)] flex items-center justify-center py-20 md:py-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-6 max-w-3xl mx-auto">
-            <h1 className="text-5xl font-bold tracking-tight">
-              Welcome to <span className="text-blue-600">Airnet360</span>
-            </h1>
-            <p className="text-xl text-gray-600">
-              Your modern web application platform for seamless digital experiences
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link
-                href="/about"
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Learn More
-              </Link>
-              <Link
-                href="#features"
-                className="px-6 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors"
-              >
-                View Features
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Knowledge Base Section */}
+      <KnowledgeBase />
+
+  
+      <Footer />
     </main>
   );
 }
