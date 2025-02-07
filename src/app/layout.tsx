@@ -1,27 +1,24 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
+import ClientLayout from '@/components/layout/ClientLayout';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Airnet360",
-  description: "Your modern web application",
+  title: 'Airnet360',
+  description: 'High Speed Internet Service Provider',
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
-        <Header />
-        <main className="w-full pt-16 md:pt-20">
-          {children}
-        </main>
+    <html lang="en">
+      <body className={inter.className}>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

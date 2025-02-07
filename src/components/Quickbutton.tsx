@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Check, Zap, ArrowRight } from 'lucide-react';
+import CurrencyDisplay from '@/components/ui/CurrencyDisplay';
 
 interface QuickButtonProps {
   speed: string;
@@ -55,9 +56,9 @@ export const QuickButton: React.FC<QuickButtonProps> = ({
         
         {/* Price */}
         <div className={`text-4xl font-bold ${isPopular ? 'text-white' : 'text-gray-900'}`}>
-          ₹{price}
+          <CurrencyDisplay amount={Number(price)} />
           <span className={`text-base font-normal ${isPopular ? 'text-blue-100' : 'text-gray-500'}`}>
-            /mo
+            /month
           </span>
         </div>
         

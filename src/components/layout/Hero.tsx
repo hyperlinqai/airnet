@@ -13,7 +13,7 @@ const Hero = () => {
   };
 
   return (
-    <section>
+    <section className="min-h-screen pt-16 md:pt-20">
       {/* Background with gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800 to-black" />
       
@@ -21,9 +21,9 @@ const Hero = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
       
       {/* Content */}
-      <div className="relative h-full flex flex-col items-center justify-center text-center px-4 pb-24">
-        <div className="container h-[calc(100%-6rem)] mx-auto px-6">
-          <div className="h-full max-w-7xl mx-auto flex flex-col">
+      <div className="relative min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center text-center px-4 pb-24">
+        <div className="container mx-auto px-6">
+          <div className="max-w-7xl mx-auto flex flex-col">
             {/* Main Content */}
             <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 py-12">
               {/* Left Column */}

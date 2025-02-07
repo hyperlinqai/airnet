@@ -33,6 +33,7 @@ const Footer = () => {
         { name: 'Network Status', href: '/status' },
         { name: 'Contact Us', href: '/contact' },
         { name: 'Legal', href: '/legal' },
+        { name: 'Login', href: '/auth/login' },
       ],
     },
   ];

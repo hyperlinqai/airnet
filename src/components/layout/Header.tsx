@@ -27,20 +27,17 @@ export const Header = () => {
       
       <div className="w-full">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between h-30 md:h-30 py-4">
             {/* Logo */}
             <Link 
               href="/" 
               className="relative group flex items-center"
             >
-              <span className={`text-xl md:text-2xl font-bold transition-colors duration-300 ${
-                isScrolled 
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent' 
-                  : 'bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent'
-              }`}>
-                Airnet360
-              </span>
-              <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all group-hover:w-full" />
+              <img
+                src="/airnet-logo.png"
+                alt="Airnet360 Logo"
+                className="h-8 md:h-10 w-auto transition-opacity duration-300 hover:opacity-90"
+              />
             </Link>
 
             {/* Desktop Navigation */}

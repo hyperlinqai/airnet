@@ -12,6 +12,7 @@ import KnowledgeBase from '@/components/layout/KnowledgeBase';
 import { Check } from '@/components/icons/Check';
 import Link from 'next/link';
 import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
 
 export default function Home() {
   const plans = [
@@ -35,6 +36,9 @@ export default function Home() {
 
   return (
     <main className="flex flex-col w-full min-h-screen">
+      {/* Header */}
+      <Header />
+
       {/* Hero Section - Full width */}
       <section className="w-full">
         <Hero />
@@ -114,7 +118,6 @@ export default function Home() {
       {/* Knowledge Base Section */}
       <KnowledgeBase />
 
-  
       <Footer />
     </main>
   );
