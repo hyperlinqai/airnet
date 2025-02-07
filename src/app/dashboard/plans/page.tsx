@@ -58,7 +58,7 @@ export default function PlansPage() {
         is_active: formData.is_active,
       };
 
-      let result;
+      let result: Plan | null = null;
       if (editingPlan) {
         console.log('Updating plan:', editingPlan.id);
         result = await updatePlan(editingPlan.id, planData);
