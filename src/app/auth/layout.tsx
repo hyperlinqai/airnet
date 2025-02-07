@@ -25,7 +25,7 @@ const routeConfig: RouteConfig = {
   },
   '/auth/forgot-password': {
     title: 'Forgot password',
-    description: 'Enter your email and we'll send you a reset link.',
+    description: 'Enter your email and we\'ll send you a reset link.',
   },
 };
 
