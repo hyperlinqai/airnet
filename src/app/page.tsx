@@ -14,36 +14,12 @@ import Link from 'next/link';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-import type { Plan } from '@/lib/supabase';
+// import { supabase } from '@/lib/supabase';
+// import type { Plan } from '@/lib/supabase';
 
 export default function Home() {
-  const [plans, setPlans] = useState<Plan[]>([]);
+  // const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [popularPlans, setPopularPlans] = useState<Plan[]>([]);
-  const [featuredPlans, setFeaturedPlans] = useState<Plan[]>([]);
-
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('plans')
-          .select('*')
-          .order('price', { ascending: true })
-          .limit(3);
-
-        if (error) throw error;
-        if (data) setPlans(data);
-      } catch (err) {
-        console.error('Error fetching plans:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlans();
-  }, []);
 
   return (
     <main className="flex flex-col w-full min-h-screen">
@@ -81,7 +57,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {plans.map((plan) => (
             <QuickButton
               key={plan.id}
@@ -92,7 +68,7 @@ export default function Home() {
             />
           ))}
 
-          </div>
+          </div> */}
 
           {/* Additional Info */}
           <div className="mt-16 text-center">
