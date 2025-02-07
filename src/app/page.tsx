@@ -13,26 +13,37 @@ import { Check } from '@/components/icons/Check';
 import Link from 'next/link';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import type { Plan } from '@/lib/supabase';
 
 export default function Home() {
-  const plans = [
-    {
-      speed: '100 Mbps',
-      price: '499',
-      features: ['Unlimited Data', 'Free Installation', 'No Contract'],
-    },
-    {
-      speed: '500 Mbps',
-      price: '699',
-      features: ['Unlimited Data', 'Free Installation', 'No Contract', 'Priority Support'],
-      isPopular: true,
-    },
-    {
-      speed: '1 Gbps',
-      price: '999',
-      features: ['Unlimited Data', 'Free Installation', 'No Contract', 'Priority Support', '24/7 Tech Support'],
-    },
-  ];
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [popularPlans, setPopularPlans] = useState<Plan[]>([]);
+  const [featuredPlans, setFeaturedPlans] = useState<Plan[]>([]);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('plans')
+          .select('*')
+          .order('price', { ascending: true })
+          .limit(3);
+
+        if (error) throw error;
+        if (data) setPlans(data);
+      } catch (err) {
+        console.error('Error fetching plans:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
 
   return (
     <main className="flex flex-col w-full min-h-screen">
@@ -71,15 +82,16 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {plans.map((plan, index) => (
-              <QuickButton
-                key={index}
-                speed={plan.speed}
-                price={plan.price}
-                features={plan.features}
-                isPopular={plan.isPopular}
-              />
-            ))}
+          {plans.map((plan) => (
+            <QuickButton
+              key={plan.id}
+              speed={String(plan.speed)}
+              price={String(plan.price)}
+              features={plan.features}
+              isPopular={plan.popular} // Accessing the popular property
+            />
+          ))}
+
           </div>
 
           {/* Additional Info */}
