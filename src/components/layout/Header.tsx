@@ -43,64 +43,52 @@ export const Header = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
               <NavLink href="/" isScrolled={isScrolled}>Home</NavLink>
-              <NavLink href="/services" isScrolled={isScrolled}>Services</NavLink>
-              <NavLink href="/coverage" isScrolled={isScrolled}>Coverage</NavLink>
-              <NavLink href="/features" isScrolled={isScrolled}>Features</NavLink>
-              <NavLink href="/support" isScrolled={isScrolled}>Support</NavLink>
+              <NavLink href="/about" isScrolled={isScrolled}>About</NavLink>
+              <NavLink href="/plans" isScrolled={isScrolled}>Plans</NavLink>
               <Link 
-                href="/get-started" 
-                className={`ml-6 px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 transform hover:scale-105 ${
-                  isScrolled
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40'
-                    : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
+                href="/contact" 
+                className={`ml-2 px-4 py-2 rounded-lg bg-[#fc3a6f] text-white hover:bg-[#e62e61] transition-colors ${
+                  isScrolled ? 'shadow-sm' : 'shadow-lg'
                 }`}
               >
                 Get Started
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100/10"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`p-2 rounded-lg focus:outline-none ${
+                  isScrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
+                }`}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden transition-all duration-300 ease-in-out ${
-        isMobileMenuOpen 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 -translate-y-4 pointer-events-none'
-      }`}>
-        <div className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-4 space-y-1 ${
-          isScrolled ? 'bg-white/[0.96]' : 'bg-gray-900/90 backdrop-blur-lg'
-        }`}>
-          <MobileNavLink href="/" isScrolled={isScrolled}>Home</MobileNavLink>
-          <MobileNavLink href="/services" isScrolled={isScrolled}>Services</MobileNavLink>
-          <MobileNavLink href="/coverage" isScrolled={isScrolled}>Coverage</MobileNavLink>
-          <MobileNavLink href="/features" isScrolled={isScrolled}>Features</MobileNavLink>
-          <MobileNavLink href="/support" isScrolled={isScrolled}>Support</MobileNavLink>
-          <div className="pt-2">
-            <Link 
-              href="/get-started" 
-              className={`block w-full px-4 py-3 rounded-lg font-medium text-sm text-center transition-all ${
-                isScrolled
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                  : 'bg-white/10 text-white hover:bg-white/20'
-              }`}
-            >
-              Get Started
-            </Link>
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white border-t">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <MobileNavLink href="/" isScrolled={isScrolled}>Home</MobileNavLink>
+              <MobileNavLink href="/about" isScrolled={isScrolled}>About</MobileNavLink>
+              <MobileNavLink href="/plans" isScrolled={isScrolled}>Plans</MobileNavLink>
+              <Link
+                href="/get-started"
+                className="block w-full text-center px-4 py-2 mt-2 rounded-lg bg-[#fc3a6f] text-white hover:bg-[#e62e61] transition-colors"
+              >
+                Get Started
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );

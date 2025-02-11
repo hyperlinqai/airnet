@@ -8,18 +8,7 @@ interface CurrencyDisplayProps {
 }
 
 export default function CurrencyDisplay({ amount, className = '' }: CurrencyDisplayProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    // Server-side or initial render: return a simple format
-    return <span className={className}>₹{amount}</span>;
-  }
-
-  // Client-side: use full formatting
+  // Format the currency consistently between server and client
   const formatted = new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',

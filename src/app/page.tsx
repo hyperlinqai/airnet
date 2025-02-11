@@ -13,6 +13,7 @@ import { Check } from '@/components/icons/Check';
 import Link from 'next/link';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import FeaturedPlans from '@/components/layout/FeaturedPlans';
 import { useState, useEffect } from 'react';
 // import { supabase } from '@/lib/supabase';
 // import type { Plan } from '@/lib/supabase';
@@ -46,45 +47,8 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_800px_at_100%_200px,rgba(29,78,216,0.05),transparent)]" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Choose Your Perfect Plan
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              Select the perfect internet plan for your needs. All plans include unlimited data
-              and no hidden fees.
-            </p>
-          </div>
-          
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {plans.map((plan) => (
-            <QuickButton
-              key={plan.id}
-              speed={String(plan.speed)}
-              price={String(plan.price)}
-              features={plan.features}
-              isPopular={plan.popular} // Accessing the popular property
-            />
-          ))}
-
-          </div> */}
-
-          {/* Additional Info */}
-          <div className="mt-16 text-center">
-            <p className="text-gray-600 mb-4">
-              All plans include free installation and no long-term contracts
-            </p>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-              <span className="flex items-center gap-1">
-                <Check className="w-4 h-4 text-green-500" /> 30-day money-back guarantee
-              </span>
-              <span className="w-1 h-1 rounded-full bg-gray-300" />
-              <span className="flex items-center gap-1">
-                <Check className="w-4 h-4 text-green-500" /> 24/7 customer support
-              </span>
-            </div>
-          </div>
+        <div className="relative">
+          <FeaturedPlans />
         </div>
       </section>
 

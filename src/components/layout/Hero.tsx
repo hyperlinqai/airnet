@@ -76,7 +76,7 @@ const Hero = () => {
                     <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:transform group-hover:translate-x-1" />
                   </Link>
                   <Link
-                    href="/coverage"
+                    href="/contact"
                     className="group px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium backdrop-blur-sm transition-all duration-300 flex items-center gap-2 border border-white/10 hover:border-blue-500/50 hover:gap-3"
                   >
                     <MapPin className="w-5 h-5 text-blue-400" />
@@ -94,7 +94,7 @@ const Hero = () => {
                     <div className="text-center">
                       <div className="text-6xl lg:text-7xl font-bold text-white mb-2">1</div>
                       <div className="text-xl lg:text-2xl font-medium text-gray-400">Gbps</div>
-                      <div className="mt-4 text-sm text-blue-400">Starting from ₹499/mo</div>
+                      <div className="mt-4 text-sm text-blue-400">Starting from ₹400/mo</div>
                     </div>
                   </div>
                 </div>

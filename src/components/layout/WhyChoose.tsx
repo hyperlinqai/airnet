@@ -27,17 +27,17 @@ const WhyChoose = () => {
 
   const stats = [
     {
-      value: '10K+',
+      value: '4k+',
       label: 'Happy Customers',
       gradient: 'from-blue-500 to-blue-600'
     },
     {
-      value: '5+',
+      value: '8+',
       label: 'Years of Service',
       gradient: 'from-purple-500 to-purple-600'
     },
     {
-      value: '50+',
+      value: '20+',
       label: 'Cities Covered',
       gradient: 'from-indigo-500 to-indigo-600'
     },

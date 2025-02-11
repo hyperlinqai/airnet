@@ -15,7 +15,7 @@ const QuickActions = () => {
       borderColor: "border-blue-200",
       iconBg: "bg-blue-100",
       glowColor: "shadow-blue-500/20",
-      href: "/coverage"
+      href: "/contact"
     },
     {
       icon: <Receipt className="w-6 h-6" />,
@@ -26,7 +26,7 @@ const QuickActions = () => {
       borderColor: "border-emerald-200",
       iconBg: "bg-emerald-100",
       glowColor: "shadow-emerald-500/20",
-      href: "/payment"
+      href: "/contact"
     },
     {
       icon: <ClipboardList className="w-6 h-6" />,
@@ -37,7 +37,7 @@ const QuickActions = () => {
       borderColor: "border-purple-200",
       iconBg: "bg-purple-100",
       glowColor: "shadow-purple-500/20",
-      href: "/track"
+      href: "/contact"
     },
     {
       icon: <MessageCircle className="w-6 h-6" />,
@@ -48,7 +48,7 @@ const QuickActions = () => {
       borderColor: "border-orange-200",
       iconBg: "bg-orange-100",
       glowColor: "shadow-orange-500/20",
-      href: "/chat"
+      href: "https://wa.me/919109153300"
     }
   ];
 
