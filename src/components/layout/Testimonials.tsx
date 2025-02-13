@@ -8,25 +8,25 @@ const Testimonials = () => {
   const testimonials = [
     {
       name: 'Rajesh Kumar',
-      location: 'Mumbai, Maharashtra',
+      location: 'Depalpur, Madhya Pradesh',
       role: 'Business Owner',
-      avatar: '/testimonials/avatar1.png',
+      avatar: '/testimonials/test-1.webp',
       content: 'Airnet360 transformed my business operations. The high-speed connectivity and reliable service have made remote work seamless for my team.',
       rating: 5
     },
     {
-      name: 'Priya Sharma',
-      location: 'Bangalore, Karnataka',
+      name: 'Amar Gautam',
+      location: 'Indore, Madhya Pradesh',
       role: 'Software Developer',
-      avatar: '/testimonials/avatar2.png',
+      avatar: '/testimonials/test-2.webp',
       content: 'As a developer working from home, stable internet is crucial. Airnet360 provides exceptional speed and their customer support is always responsive.',
       rating: 5
     },
     {
       name: 'Amit Patel',
-      location: 'Delhi NCR',
+      location: 'Mahow, Madhya Pradesh',
       role: 'Digital Content Creator',
-      avatar: '/testimonials/avatar3.png',
+      avatar: '/testimonials/test-3.webp',
       content: 'Uploading large video files used to be a nightmare. With Airnet360\'s lightning-fast speeds, I can focus on creating content without worrying about connectivity.',
       rating: 4.8
     }

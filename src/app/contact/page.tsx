@@ -1,20 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import SubPageLayout from '@/components/layout/SubPageLayout';
-import Input from '@/components/ui/Input';
 import { Phone, Mail, MapPin, Send, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { addLead } from '@/lib/crm';
+import { indianStatesAndCities } from '@/data/indianCities';
+
+interface City {
+  City: string;
+  District: string;
+  State: string;
+  Population?: number;
+}
 
 interface FormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
-  subject: string;
-  message: string;
-  city?: string;
-  state?: string;
-  pincode?: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
 }
 
 interface FormErrors {
@@ -23,11 +30,11 @@ interface FormErrors {
 
 const ContactPage = () => {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
-    subject: '',
-    message: '',
+    address: '',
     city: '',
     state: '',
     pincode: ''
@@ -37,18 +44,37 @@ const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  // Get sorted list of states
+  const states = useMemo(() => Object.keys(indianStatesAndCities).sort(), []);
+
+  // Get cities for selected state
+  const cities = useMemo(() => {
+    if (!formData.state) return [];
+    return indianStatesAndCities[formData.state as keyof typeof indianStatesAndCities] || [];
+  }, [formData.state]);
+
   const validateForm = () => {
     const newErrors: FormErrors = {};
     
-    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.firstName) newErrors.firstName = 'First name is required';
+    if (!formData.lastName) newErrors.lastName = 'Last name is required';
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
-    if (!formData.phone) newErrors.phone = 'Phone number is required';
-    if (!formData.subject) newErrors.subject = 'Subject is required';
-    if (!formData.message) newErrors.message = 'Message is required';
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
+      newErrors.phone = 'Please enter a valid 10-digit Indian phone number';
+    }
+    if (!formData.address) newErrors.address = 'Address is required';
+    if (!formData.state) newErrors.state = 'State is required';
+    if (!formData.city) newErrors.city = 'City is required';
+    // Only validate pincode format if it's provided
+    if (formData.pincode && !/^\d{6}$/.test(formData.pincode)) {
+      newErrors.pincode = 'Please enter a valid 6-digit pincode';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -63,21 +89,16 @@ const ContactPage = () => {
     setSubmitSuccess(false);
 
     try {
-      // Split name into first and last name
-      const nameParts = formData.name.trim().split(' ');
-      const firstName = nameParts[0];
-      const lastName = nameParts.slice(1).join(' ');
-
       // Prepare lead data
       const leadData = {
-        firstName,
-        lastName: lastName || undefined,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         phoneNumber: formData.phone,
         emailId: formData.email,
+        address: formData.address,
         address_city: formData.city,
         address_state: formData.state,
         address_pin: formData.pincode,
-        comments: `Subject: ${formData.subject}\n\nMessage: ${formData.message}`,
         userType: 'home' as const,
         leadSource: 'website',
         notifySms: 'yes' as const,
@@ -89,11 +110,11 @@ const ContactPage = () => {
 
       setSubmitSuccess(true);
       setFormData({
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         phone: '',
-        subject: '',
-        message: '',
+        address: '',
         city: '',
         state: '',
         pincode: ''
@@ -106,219 +127,253 @@ const ContactPage = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
   return (
-    <SubPageLayout
-      title="Contact Us"
-      description="Get in touch with our team for any inquiries or support."
-    >
-      <div className="w-full">
-        {/* Contact Information Section */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          <div className="text-center mb-12 pt-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">Get in Touch</h1>
-            <p className="text-base text-gray-600 max-w-xl mx-auto">
-              Have questions about our services? We're here to help and answer any questions you might have.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#fc3a6f]/20 transition-colors">
-              <div className="flex items-center mb-3">
-                <div className="w-10 h-10 bg-[#fc3a6f]/10 rounded-full flex items-center justify-center mr-3">
-                  <Phone className="w-5 h-5 text-[#fc3a6f]" />
+    <SubPageLayout title="Contact Us" description="Get in touch with us">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Contact Information */}
+          <div className="lg:col-span-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sticky top-8">
+              <h3 className="text-xl font-semibold text-gray-900 mb-6">Contact Information</h3>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-blue-50 p-3 rounded-xl">
+                    <Phone className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Phone</p>
+                    <p className="text-gray-900 mt-1">+91 (800) 123-4567</p>
+                    <p className="text-sm text-gray-500 mt-1">Mon-Fri from 9am to 6pm.</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-semibold text-gray-900">Call Us</h3>
-                  <p className="text-sm text-gray-600">Mon-Sat 9am to 6pm</p>
-                </div>
-              </div>
-              <a href="tel:+919876543210" className="text-[#fc3a6f] hover:text-[#e62e61] font-medium text-sm">
-                +91 98765 43210
-              </a>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#fc3a6f]/20 transition-colors">
-              <div className="flex items-center mb-3">
-                <div className="w-10 h-10 bg-[#fc3a6f]/10 rounded-full flex items-center justify-center mr-3">
-                  <Mail className="w-5 h-5 text-[#fc3a6f]" />
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold text-gray-900">Email Us</h3>
-                  <p className="text-sm text-gray-600">24/7 Support</p>
-                </div>
-              </div>
-              <a href="mailto:support@airnet360.com" className="text-[#fc3a6f] hover:text-[#e62e61] font-medium text-sm">
-                support@airnet360.com
-              </a>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#fc3a6f]/20 transition-colors">
-              <div className="flex items-center mb-3">
-                <div className="w-10 h-10 bg-[#fc3a6f]/10 rounded-full flex items-center justify-center mr-3">
-                  <Clock className="w-5 h-5 text-[#fc3a6f]" />
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold text-gray-900">Business Hours</h3>
-                  <p className="text-sm text-gray-600">Working Hours</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-700">
-                Monday - Saturday<br />
-                9:00 AM - 6:00 PM
-              </p>
-            </div>
-          </div>
-
-          {/* Contact Form Section */}
-          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-            <div className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input
-                    label="Your Name*"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    error={errors.name}
-                    placeholder="John Doe"
-                    icon={<span className="text-gray-400">👤</span>}
-                  />
-                  
-                  <Input
-                    label="Your Email*"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    error={errors.email}
-                    placeholder="john@example.com"
-                    icon={<Mail className="w-4 h-4 text-gray-400" />}
-                  />
-                  
-                  <Input
-                    label="Phone Number*"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    error={errors.phone}
-                    placeholder="+91 98765 43210"
-                    icon={<Phone className="w-4 h-4 text-gray-400" />}
-                  />
-                  
-                  <Input
-                    label="Subject*"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    error={errors.subject}
-                    placeholder="How can we help you?"
-                    icon={<span className="text-gray-400">📝</span>}
-                  />
-                  
-                  <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Input
-                      label="City"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder="Your city"
-                      icon={<MapPin className="w-4 h-4 text-gray-400" />}
-                    />
-                    
-                    <Input
-                      label="State"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      placeholder="Your state"
-                      icon={<MapPin className="w-4 h-4 text-gray-400" />}
-                    />
-                    
-                    <Input
-                      label="Pincode"
-                      name="pincode"
-                      value={formData.pincode}
-                      onChange={handleChange}
-                      placeholder="Your pincode"
-                      icon={<MapPin className="w-4 h-4 text-gray-400" />}
-                    />
+                
+                <div className="flex items-start space-x-4">
+                  <div className="bg-blue-50 p-3 rounded-xl">
+                    <Mail className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Email</p>
+                    <p className="text-gray-900 mt-1">contact@airnet360.com</p>
+                    <p className="text-sm text-gray-500 mt-1">Online support</p>
                   </div>
                 </div>
 
-                <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Message*
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Type your message here..."
-                    rows={3}
-                    className={`w-full px-3 py-2 rounded-lg border ${
-                      errors.message ? 'border-red-500' : 'border-gray-300'
-                    } focus:outline-none focus:ring-2 focus:ring-[#fc3a6f] focus:border-transparent resize-none text-sm`}
+                <div className="flex items-start space-x-4">
+                  <div className="bg-blue-50 p-3 rounded-xl">
+                    <MapPin className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Office</p>
+                    <p className="text-gray-900 mt-1">123 Business Avenue,</p>
+                    <p className="text-gray-900">Mumbai, India</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-blue-50 p-3 rounded-xl">
+                    <Clock className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Working Hours</p>
+                    <p className="text-gray-900 mt-1">Monday - Friday</p>
+                    <p className="text-gray-900">9:00 AM - 6:00 PM</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="lg:col-span-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <h3 className="text-xl font-semibold text-gray-900 mb-6">Send us a message</h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">First Name *</label>
+                    <input
+                      type="text"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      className={`w-full px-4 py-3 rounded-xl border ${
+                        errors.firstName ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                      } focus:ring-1 outline-none transition-colors`}
+                      placeholder="John"
+                    />
+                    {errors.firstName && (
+                      <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">Last Name *</label>
+                    <input
+                      type="text"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      className={`w-full px-4 py-3 rounded-xl border ${
+                        errors.lastName ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                      } focus:ring-1 outline-none transition-colors`}
+                      placeholder="Doe"
+                    />
+                    {errors.lastName && (
+                      <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">Email *</label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className={`w-full px-4 py-3 rounded-xl border ${
+                        errors.email ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                      } focus:ring-1 outline-none transition-colors`}
+                      placeholder="john.doe@example.com"
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">Phone *</label>
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className={`w-full px-4 py-3 rounded-xl border ${
+                        errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                      } focus:ring-1 outline-none transition-colors`}
+                      placeholder="9876543210"
+                    />
+                    {errors.phone && (
+                      <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700">Address *</label>
+                  <input
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className={`w-full px-4 py-3 rounded-xl border ${
+                      errors.address ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                      'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                    } focus:ring-1 outline-none transition-colors`}
+                    placeholder="Enter your address"
                   />
-                  {errors.message && (
-                    <p className="mt-1 text-xs text-red-500">{errors.message}</p>
+                  {errors.address && (
+                    <p className="text-sm text-red-600 mt-1">{errors.address}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">State *</label>
+                    <select
+                      value={formData.state}
+                      onChange={(e) => setFormData({ ...formData, state: e.target.value, city: '' })}
+                      className={`w-full px-4 py-3 rounded-xl border ${
+                        errors.state ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                      } focus:ring-1 outline-none transition-colors bg-white`}
+                    >
+                      <option value="">Select State</option>
+                      {states.map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    {errors.state && (
+                      <p className="text-sm text-red-600 mt-1">{errors.state}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">City *</label>
+                    <select
+                      value={formData.city}
+                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                      disabled={!formData.state}
+                      className={`w-full px-4 py-3 rounded-xl border ${
+                        errors.city ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                      } focus:ring-1 outline-none transition-colors bg-white disabled:bg-gray-50 disabled:text-gray-500`}
+                    >
+                      <option value="">Select City</option>
+                      {cities.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
+                    {errors.city && (
+                      <p className="text-sm text-red-600 mt-1">{errors.city}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700">Pincode</label>
+                  <input
+                    type="text"
+                    value={formData.pincode}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    className={`w-full px-4 py-3 rounded-xl border ${
+                      errors.pincode ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 
+                      'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                    } focus:ring-1 outline-none transition-colors`}
+                    placeholder="Enter 6-digit pincode (optional)"
+                  />
+                  {errors.pincode && (
+                    <p className="text-sm text-red-600 mt-1">{errors.pincode}</p>
                   )}
                 </div>
 
                 {errors.submit && (
-                  <div className="flex items-center gap-2 text-red-500 bg-red-50 p-2 rounded-lg text-xs">
-                    <AlertCircle className="w-4 h-4" />
-                    <p>{errors.submit}</p>
+                  <div className="flex items-center space-x-2 text-red-600 bg-red-50 p-4 rounded-xl">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <p className="text-sm">{errors.submit}</p>
                   </div>
                 )}
 
                 {submitSuccess && (
-                  <div className="flex items-center gap-2 text-green-600 bg-green-50 p-2 rounded-lg text-xs">
-                    <CheckCircle2 className="w-4 h-4" />
-                    <p>Thank you for contacting us! We'll get back to you soon.</p>
+                  <div className="flex items-center space-x-2 text-green-600 bg-green-50 p-4 rounded-xl">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                    <p className="text-sm">Thank you for contacting us! We'll get back to you soon.</p>
                   </div>
                 )}
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#fc3a6f] text-white py-2.5 px-4 rounded-lg hover:bg-[#fc3a6f] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl hover:bg-blue-700 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                    disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200
+                    flex items-center justify-center space-x-2"
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Sending...
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Sending...</span>
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
-                      Send Message
+                      <Send className="w-5 h-5" />
+                      <span>Send Message</span>
                     </>
                   )}
                 </button>
               </form>
             </div>
           </div>
-        </div>
-
-        {/* Map Section */}
-        <div className="w-full h-[300px] bg-gray-100 relative">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.989557424163!2d75.8872226!3d22.7524903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDQ1JzA4LjkiTiA3NcKwNTMnMTQuMCJF!5e0!3m2!1sen!2sin!4v1625136體"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
         </div>
       </div>
     </SubPageLayout>

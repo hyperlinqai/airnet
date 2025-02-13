@@ -223,7 +223,7 @@ const PlansPage = () => {
                       </div>
                       {selectedDuration !== '1' && (
                         <div className="text-xs text-[#fc3a6f] mb-3">
-                          Save up to {selectedDuration === '12' ? '20%' : selectedDuration === '6' ? '15%' : '10%'}
+                          Save up to {selectedDuration === '12' ? '15%' : selectedDuration === '6' ? '7.5%' : '0%'}
                         </div>
                       )}
                     </div>

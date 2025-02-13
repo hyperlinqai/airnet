@@ -8,9 +8,9 @@ interface PlanDurationSelectorProps {
 
 const durations = [
   { label: '1 MONTH', value: '1', discount: null },
-  { label: '3 MONTHS', value: '3', discount: '10%' },
-  { label: '6 MONTHS', value: '6', discount: '15%' },
-  { label: '12 MONTHS', value: '12', discount: '20%' },
+  { label: '3 MONTHS', value: '3', discount: null },
+  { label: '6 MONTHS', value: '6', discount: '7.5%' },
+  { label: '12 MONTHS', value: '12', discount: '15%' },
 ];
 
 const PlanDurationSelector = ({
