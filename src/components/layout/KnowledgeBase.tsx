@@ -44,7 +44,7 @@ const KnowledgeBase = () => {
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-3">Live Chat</h3>
             <p className="text-gray-600 mb-6">Get instant help from our support team</p>
-            <button className="text-green-600 font-medium hover:text-green-700">
+            <button onClick={() => window.open('https://wa.me/919109153300', '_blank')} className="text-green-600 font-medium hover:text-green-700">
               Start Chat →
             </button>
           </div>
@@ -56,8 +56,8 @@ const KnowledgeBase = () => {
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-3">24/7 Phone Support</h3>
             <p className="text-gray-600 mb-6">Call us anytime for assistance</p>
-            <a href="tel:0731-4894499" className="text-purple-600 font-medium hover:text-purple-700">
-              0731-4894499 →
+            <a href="tel:+919109153300" className="text-purple-600 font-medium hover:text-purple-700">
+              +91 9109153300 →
             </a>
           </div>
         </div>

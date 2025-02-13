@@ -142,7 +142,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-600">Phone</p>
-                    <p className="text-gray-900 mt-1">+91 (800) 123-4567</p>
+                    <p className="text-gray-900 mt-1">+91 9109153300</p>
                     <p className="text-sm text-gray-500 mt-1">Mon-Fri from 9am to 6pm.</p>
                   </div>
                 </div>
@@ -153,7 +153,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-600">Email</p>
-                    <p className="text-gray-900 mt-1">contact@airnet360.com</p>
+                    <p className="text-gray-900 mt-1">support@airnet360.com</p>
                     <p className="text-sm text-gray-500 mt-1">Online support</p>
                   </div>
                 </div>
@@ -164,8 +164,8 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-600">Office</p>
-                    <p className="text-gray-900 mt-1">123 Business Avenue,</p>
-                    <p className="text-gray-900">Mumbai, India</p>
+                    <p className="text-gray-900 mt-1">404, 1 New Palasia Silver Arched,</p>
+                    <p className="text-gray-900">Indore, Madhya Pradesh</p>
                   </div>
                 </div>
 
